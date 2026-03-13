@@ -36,6 +36,7 @@ export interface HealthRecord {
 
 // ---- Parent Beetle Details ----
 export interface ParentDetails {
+  beetleId?: string;   // รหัสด้วงที่เป็นพ่อ/แม่
   size?: string;
   color?: string;
 }
@@ -81,6 +82,9 @@ export interface DashboardStats {
   byStatus: Record<BeetleStatus, number>;
   soilChangeDueToday: BeetleSummary[];
   soilChangeDueThisWeek: BeetleSummary[];
+  speciesBreakdown: { species: string; count: number }[];
+  notWeighedRecently: BeetleSummary[];
+  sickBeetles: BeetleSummary[];
 }
 
 // ---- Light summary (used in lists/cards) ----

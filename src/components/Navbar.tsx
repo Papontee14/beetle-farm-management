@@ -16,14 +16,34 @@ export default function Navbar() {
     <>
       {/* Top bar */}
       <header className="sticky top-0 z-50 bg-forest-700 text-white shadow-md">
-        <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 h-14 flex items-center gap-3">
           <span className="text-2xl">🪲</span>
-          <h1 className="text-base font-bold tracking-tight">ระบบจัดการฟาร์มด้วง</h1>
+          <h1 className="text-base font-bold tracking-tight flex-1">ระบบจัดการฟาร์มด้วง</h1>
+
+          {/* Desktop nav links — hidden on mobile */}
+          <nav className="hidden md:flex items-center gap-1">
+            {NAV.map(({ href, label, icon: Icon }) => {
+              const active = pathname === href || (href !== "/" && pathname.startsWith(href));
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                    ${active
+                      ? "bg-white/20 text-white"
+                      : "text-white/70 hover:bg-white/10 hover:text-white"}`}
+                >
+                  <Icon size={16} strokeWidth={active ? 2.5 : 1.8} />
+                  <span>{label}</span>
+                </Link>
+              );
+            })}
+          </nav>
         </div>
       </header>
 
-      {/* Bottom navigation (mobile-first) */}
-      <nav className="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-gray-200 shadow-lg">
+      {/* Bottom navigation — mobile only */}
+      <nav className="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-gray-200 shadow-lg md:hidden">
         <div className="max-w-lg mx-auto flex">
           {NAV.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || (href !== "/" && pathname.startsWith(href));

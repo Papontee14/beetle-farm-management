@@ -210,6 +210,14 @@ export function findAll(filter?: {
   search?: string;
   stage?: string;
   status?: string;
+  sex?: string;
+  containerCode?: string;
+  species?: string;
+  fatherId?: string;
+  motherId?: string;
+  weightMin?: number;
+  weightMax?: number;
+  soilWithinDays?: number;
   soilDue?: boolean;
 }): Beetle[] {
   let data = getStore();
@@ -221,11 +229,43 @@ export function findAll(filter?: {
         b.beetleId.toLowerCase().includes(q) ||
         (b.name ?? "").toLowerCase().includes(q) ||
         b.species.toLowerCase().includes(q) ||
-        b.containerCode.toLowerCase().includes(q)
+        b.containerCode.toLowerCase().includes(q) ||
+        (b.lineage ?? "").toLowerCase().includes(q)
     );
   }
   if (filter?.stage)  data = data.filter((b) => b.stage === filter.stage);
   if (filter?.status) data = data.filter((b) => b.status === filter.status);
+  if (filter?.sex)    data = data.filter((b) => b.sex === filter.sex);
+  if (filter?.containerCode) {
+    const cc = filter.containerCode.toLowerCase();
+    data = data.filter((b) => b.containerCode.toLowerCase().includes(cc));
+  }
+  if (filter?.species) {
+    const sp = filter.species.toLowerCase();
+    data = data.filter((b) => b.species.toLowerCase().includes(sp));
+  }
+  if (filter?.fatherId) {
+    const fid = filter.fatherId.toLowerCase();
+    data = data.filter((b) => b.parentInfo?.father?.beetleId?.toLowerCase().includes(fid));
+  }
+  if (filter?.motherId) {
+    const mid = filter.motherId.toLowerCase();
+    data = data.filter((b) => b.parentInfo?.mother?.beetleId?.toLowerCase().includes(mid));
+  }
+  if (filter?.weightMin !== undefined) {
+    data = data.filter((b) => (b.currentWeightGrams ?? 0) >= filter.weightMin!);
+  }
+  if (filter?.weightMax !== undefined) {
+    data = data.filter((b) => b.currentWeightGrams !== undefined && b.currentWeightGrams <= filter.weightMax!);
+  }
+  if (filter?.soilWithinDays !== undefined) {
+    const now = new Date();
+    const limit = new Date(now);
+    limit.setDate(limit.getDate() + filter.soilWithinDays);
+    data = data.filter(
+      (b) => b.nextSoilChange && new Date(b.nextSoilChange) <= limit
+    );
+  }
   if (filter?.soilDue) {
     const now = new Date();
     data = data.filter(
@@ -234,6 +274,37 @@ export function findAll(filter?: {
   }
 
   return data;
+}
+
+export function duplicateBeetle(
+  id: string,
+  opts: { newBeetleId: string; newContainerCode: string; splitQty: number }
+): { original: Beetle; copy: Beetle } | null | undefined {
+  const source = findById(id);
+  if (!source) return undefined;
+  // Check uniqueness of new beetle ID
+  const idTaken = getStore().some(
+    (b) => b.beetleId.toLowerCase() === opts.newBeetleId.toLowerCase() && b._id !== id
+  );
+  if (idTaken) return null; // null = duplicate ID conflict
+  const remaining = (source.quantity ?? 1) - opts.splitQty;
+  if (remaining < 0) return undefined;
+  const updated = updateBeetle(id, { quantity: remaining > 0 ? remaining : 1 });
+  if (!updated) return undefined;
+  const copy = createBeetle({
+    ...source,
+    _id: undefined as unknown as string,
+    beetleId: opts.newBeetleId,
+    containerCode: opts.newContainerCode,
+    quantity: opts.splitQty,
+    weightLogs: [],
+    feedingLogs: [],
+    healthRecords: [],
+    notes: `\u0e41\u0e22\u0e01\u0e08\u0e32\u0e01 ${source.beetleId}`,
+    createdAt: undefined,
+    updatedAt: undefined,
+  });
+  return { original: updated, copy };
 }
 
 export function findById(id: string): Beetle | undefined {

@@ -5,10 +5,10 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { addWeightLog, addFeedingLog, findById } from "@/lib/mockStore";
+import { addWeightLog, addFeedingLog, findById, recordSoilChange } from "@/lib/mockStore";
 
 export async function POST(req: NextRequest) {
-  const { beetleId, feedingLog, weightLog } = await req.json();
+  const { beetleId, feedingLog, weightLog, soilChange } = await req.json();
 
   if (!beetleId) {
     return NextResponse.json({ success: false, message: "beetleId is required" }, { status: 400 });
@@ -25,6 +25,10 @@ export async function POST(req: NextRequest) {
 
   if (weightLog)  latest = addWeightLog(beetleId, weightLog)  ?? latest;
   if (feedingLog) latest = addFeedingLog(beetleId, feedingLog) ?? latest;
+  // เมื่อชั่งหนอนพร้อมเปลี่ยนแมท - บันทึก lastSoilChange และคำนวณ nextSoilChange
+  if (soilChange?.daysUntilNext) {
+    latest = recordSoilChange(beetleId, Number(soilChange.daysUntilNext)) ?? latest;
+  }
 
   return NextResponse.json({ success: true, data: latest });
 }

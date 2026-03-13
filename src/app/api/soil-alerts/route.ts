@@ -12,15 +12,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { findAll, recordSoilChange } from "@/lib/mockStore";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const all = new URL(req.url).searchParams.get("all") === "true";
   const now = new Date();
 
-  // Filter เฉพาะด้วงที่ถึงกำหนดเปลี่ยนดินแล้ว และยังมีชีวิต
-  const beetles = findAll({ soilDue: true }).filter(
-    (b) => b.status !== "Dead" && b.status !== "Sold"
-  );
+  const beetles = all
+    ? findAll().filter((b) => b.status !== "Dead" && b.status !== "Sold")
+    : findAll({ soilDue: true }).filter((b) => b.status !== "Dead" && b.status !== "Sold");
 
-  return NextResponse.json({ success: true, data: beetles, _now: now });
+  return NextResponse.json({ success: true, data: beetles, _now: now.toISOString() });
 }
 
 /**

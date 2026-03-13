@@ -19,9 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="pb-24">
+      <body className="pb-24 md:pb-0">
         <Navbar />
-        <main className="max-w-lg mx-auto px-4 pt-4">{children}</main>
+        <main className="max-w-6xl mx-auto px-4 md:px-6 pt-4 md:pt-6">{children}</main>
         <Toaster
           position="top-center"
           toastOptions={{
