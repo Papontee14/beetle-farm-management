@@ -293,7 +293,6 @@ export function duplicateBeetle(
   if (!updated) return undefined;
   const copy = createBeetle({
     ...source,
-    _id: undefined as unknown as string,
     beetleId: opts.newBeetleId,
     containerCode: opts.newContainerCode,
     quantity: opts.splitQty,

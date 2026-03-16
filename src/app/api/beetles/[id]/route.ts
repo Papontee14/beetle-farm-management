@@ -6,16 +6,21 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { findById, updateBeetle, deleteBeetle } from "@/lib/mockStore";
+import { findById, updateBeetle, deleteBeetle } from "@/lib/supabaseStore";
 
 type Params = { params: { id: string } };
 
 export async function GET(_req: NextRequest, { params }: Params) {
-  const beetle = findById(params.id);
-  if (!beetle) {
-    return NextResponse.json({ success: false, message: "ไม่พบด้วงตัวนี้" }, { status: 404 });
+  try {
+    const beetle = await findById(params.id);
+    if (!beetle) {
+      return NextResponse.json({ success: false, message: "ไม่พบด้วงตัวนี้" }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, data: beetle });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Internal server error";
+    return NextResponse.json({ success: false, message }, { status: 500 });
   }
-  return NextResponse.json({ success: true, data: beetle });
 }
 
 export async function PUT(req: NextRequest, { params }: Params) {
@@ -26,7 +31,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
       body.currentWeightGrams = body.weightLogs.at(-1).weight;
     }
 
-    const updated = updateBeetle(params.id, body);
+    const updated = await updateBeetle(params.id, body);
     if (!updated) {
       return NextResponse.json({ success: false, message: "ไม่พบด้วงตัวนี้" }, { status: 404 });
     }
@@ -38,9 +43,14 @@ export async function PUT(req: NextRequest, { params }: Params) {
 }
 
 export async function DELETE(_req: NextRequest, { params }: Params) {
-  const ok = deleteBeetle(params.id);
-  if (!ok) {
-    return NextResponse.json({ success: false, message: "ไม่พบด้วงตัวนี้" }, { status: 404 });
+  try {
+    const ok = await deleteBeetle(params.id);
+    if (!ok) {
+      return NextResponse.json({ success: false, message: "ไม่พบด้วงตัวนี้" }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, data: { message: "ลบเรียบร้อย" } });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Internal server error";
+    return NextResponse.json({ success: false, message }, { status: 500 });
   }
-  return NextResponse.json({ success: true, data: { message: "ลบเรียบร้อย" } });
 }

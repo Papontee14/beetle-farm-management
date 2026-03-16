@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { duplicateBeetle, findAll } from "@/lib/mockStore";
+import { duplicateBeetle, findAll } from "@/lib/supabaseStore";
 
 type Params = { params: { id: string } };
 
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest, { params }: Params) {
     const normalizedId = String(newBeetleId).toUpperCase();
 
     // Check uniqueness
-    const all = findAll();
+    const all = await findAll(undefined, { includeLogs: false });
     if (all.some((b) => b.beetleId.toLowerCase() === normalizedId.toLowerCase() &&  b._id !== params.id)) {
       return NextResponse.json(
         { success: false, message: `รหัสด้วง "${normalizedId}" มีอยู่ในระบบแล้ว กรุณาใช้รหัสอื่น` },
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest, { params }: Params) {
       );
     }
 
-    const result = duplicateBeetle(params.id, {
+    const result = await duplicateBeetle(params.id, {
       newBeetleId: normalizedId,
       newContainerCode,
       splitQty: Number(splitQty),

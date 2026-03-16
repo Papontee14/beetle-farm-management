@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { BeetleStage, BeetleStatus, BeetleSex } from "@/types";
+import FarmSelect from "@/components/FarmSelect";
+import FarmDatePicker from "@/components/FarmDatePicker";
 
 const STAGES: BeetleStage[] = ["Egg", "L1", "L2", "L3", "Pupa", "Adult"];
 const STATUSES: BeetleStatus[] = ["Healthy", "Sick", "Dead", "Sold"];
@@ -106,7 +108,7 @@ export default function NewBeetlePage() {
         {/* Identity */}
         <div className="card space-y-3">
           <h2 className="font-bold text-gray-700 text-sm uppercase tracking-wide">ข้อมูลประจำตัว</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="label">รหัสด้วง *</label>
               <input className="input-field" placeholder="BTL-001" required
@@ -162,24 +164,30 @@ export default function NewBeetlePage() {
         {/* Stage & Status */}
         <div className="card space-y-3">
           <h2 className="font-bold text-gray-700 text-sm uppercase tracking-wide">สถานะ</h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="label">เพศ</label>
-              <select className="input-field" value={form.sex} onChange={(e) => set("sex", e.target.value)}>
-                {SEXES.map((s) => <option key={s}>{s}</option>)}
-              </select>
+              <FarmSelect
+                value={form.sex}
+                onChange={(v) => set("sex", v)}
+                options={SEXES.map((s) => ({ value: s, label: s }))}
+              />
             </div>
             <div>
               <label className="label">ระยะ *</label>
-              <select className="input-field" value={form.stage} onChange={(e) => set("stage", e.target.value)}>
-                {STAGES.map((s) => <option key={s}>{s}</option>)}
-              </select>
+              <FarmSelect
+                value={form.stage}
+                onChange={(v) => set("stage", v)}
+                options={STAGES.map((s) => ({ value: s, label: s }))}
+              />
             </div>
             <div>
               <label className="label">สุขภาพ</label>
-              <select className="input-field" value={form.status} onChange={(e) => set("status", e.target.value)}>
-                {STATUSES.map((s) => <option key={s}>{s}</option>)}
-              </select>
+              <FarmSelect
+                value={form.status}
+                onChange={(v) => set("status", v)}
+                options={STATUSES.map((s) => ({ value: s, label: s }))}
+              />
             </div>
           </div>
         </div>
@@ -189,7 +197,7 @@ export default function NewBeetlePage() {
           <h2 className="font-bold text-gray-700 text-sm uppercase tracking-wide">
             กล่อง &amp; {isAdult ? "ความยาว" : "น้ำหนัก"}
           </h2>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="label">รหัสกล่อง *</label>
               <input className="input-field" placeholder="BOX-01" required
@@ -214,31 +222,39 @@ export default function NewBeetlePage() {
         {/* Dates */}
         <div className="card space-y-3">
           <h2 className="font-bold text-gray-700 text-sm uppercase tracking-wide">วันที่</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {isAdult ? (
               <>
                 <div>
                   <label className="label">วันที่ออกจากดักแด้</label>
-                  <input className="input-field" type="date"
-                    value={form.emergenceDate} onChange={(e) => set("emergenceDate", e.target.value)} />
+                  <FarmDatePicker
+                    value={form.emergenceDate}
+                    onChange={(v) => set("emergenceDate", v)}
+                  />
                 </div>
                 <div>
                   <label className="label">วันที่เริ่มกิน</label>
-                  <input className="input-field" type="date"
-                    value={form.firstFeedingDate} onChange={(e) => set("firstFeedingDate", e.target.value)} />
+                  <FarmDatePicker
+                    value={form.firstFeedingDate}
+                    onChange={(v) => set("firstFeedingDate", v)}
+                  />
                 </div>
               </>
             ) : (
               <>
                 <div>
                   <label className="label">วันเกิด</label>
-                  <input className="input-field" type="date"
-                    value={form.birthDate} onChange={(e) => set("birthDate", e.target.value)} />
+                  <FarmDatePicker
+                    value={form.birthDate}
+                    onChange={(v) => set("birthDate", v)}
+                  />
                 </div>
                 <div>
                   <label className="label">วันที่เข้าฟาร์ม *</label>
-                  <input className="input-field" type="date" required
-                    value={form.entryDate} onChange={(e) => set("entryDate", e.target.value)} />
+                  <FarmDatePicker
+                    value={form.entryDate}
+                    onChange={(v) => set("entryDate", v)}
+                  />
                 </div>
               </>
             )}
@@ -246,13 +262,17 @@ export default function NewBeetlePage() {
               <>
                 <div>
                   <label className="label">เปลี่ยนแมทล่าสุด</label>
-                  <input className="input-field" type="date"
-                    value={form.lastSoilChange} onChange={(e) => set("lastSoilChange", e.target.value)} />
+                  <FarmDatePicker
+                    value={form.lastSoilChange}
+                    onChange={(v) => set("lastSoilChange", v)}
+                  />
                 </div>
                 <div>
                   <label className="label">นัดเปลี่ยนแมทครั้งหน้า</label>
-                  <input className="input-field" type="date"
-                    value={form.nextSoilChange} onChange={(e) => set("nextSoilChange", e.target.value)} />
+                  <FarmDatePicker
+                    value={form.nextSoilChange}
+                    onChange={(v) => set("nextSoilChange", v)}
+                  />
                 </div>
               </>
             )}
@@ -262,7 +282,7 @@ export default function NewBeetlePage() {
         {/* Parent Info */}
         <div className="card space-y-3">
           <h2 className="font-bold text-gray-700 text-sm uppercase tracking-wide">ข้อมูลพ่อแม่พันธุ์</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="label">ขนาดพ่อพันธุ์</label>
               <input className="input-field" placeholder="เช่น 85mm"

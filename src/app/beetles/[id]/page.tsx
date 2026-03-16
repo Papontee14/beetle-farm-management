@@ -205,7 +205,7 @@ export default function BeetleDetailPage() {
           <ChevronLeft size={24} />
         </button>
         <h1 className="flex-1 text-xl font-bold text-forest-800 truncate">
-          {beetle.beetleId}{beetle.name ? ` — ${beetle.name}` : ""}
+          {beetle.beetleId}
         </h1>
         <span className={`text-xs font-bold px-2 py-1 rounded-full ${STATUS_COLOR[beetle.status] ?? "bg-gray-100"}`}>
           {beetle.status}

@@ -52,18 +52,16 @@ export default function SoilAlertList({ items, compact = false, onDone }: SoilAl
               📦 {b.containerCode} — {b.beetleId}
             </p>
             {!compact && (
-              <p className="text-xs text-gray-500 mt-0.5">
-                {b.species} · {b.stage}
+              <>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {b.species} · {b.stage}
+                </p>
                 {b.nextSoilChange && (
-                  <>
-                    {" · "}
-                    <span className="text-red-500 font-medium">
-                      ครบกำหนด{" "}
-                      {format(new Date(b.nextSoilChange), "d MMM yy", { locale: th })}
-                    </span>
-                  </>
+                  <p className="text-xs text-red-500 font-medium mt-0.5">
+                    ครบกำหนด {format(new Date(b.nextSoilChange), "d MMM yy", { locale: th })}
+                  </p>
                 )}
-              </p>
+              </>
             )}
           </div>
           {!compact && onDone && (

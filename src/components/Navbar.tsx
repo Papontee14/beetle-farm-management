@@ -15,7 +15,7 @@ export default function Navbar() {
   return (
     <>
       {/* Top bar */}
-      <header className="sticky top-0 z-50 bg-forest-700 text-white shadow-md">
+      <header className="sticky top-0 z-50 bg-forest-800 text-white shadow-md">
         <div className="max-w-6xl mx-auto px-4 md:px-6 h-14 flex items-center gap-3">
           <span className="text-2xl">🪲</span>
           <h1 className="text-base font-bold tracking-tight flex-1">ระบบจัดการฟาร์มด้วง</h1>
