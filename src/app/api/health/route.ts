@@ -1,9 +1,3 @@
-/**
- * POST /api/health  – เพิ่ม health record ให้ด้วงตัวหนึ่ง
- * Body: { beetleId: string, record: HealthRecord }
- * ใช้ in-memory mock store
- */
-
 import { NextRequest, NextResponse } from "next/server";
 import { addHealthRecord } from "@/lib/supabaseStore";
 

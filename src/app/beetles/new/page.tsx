@@ -3,13 +3,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { BeetleStage, BeetleStatus, BeetleSex } from "@/types";
+import { BeetleStage, BeetleStatus, BeetleSex, STAGES, STATUSES, SEXES } from "@/types";
 import FarmSelect from "@/components/FarmSelect";
 import FarmDatePicker from "@/components/FarmDatePicker";
-
-const STAGES: BeetleStage[] = ["Egg", "L1", "L2", "L3", "Pupa", "Adult"];
-const STATUSES: BeetleStatus[] = ["Healthy", "Sick", "Dead", "Sold"];
-const SEXES: BeetleSex[] = ["Male", "Female", "Unknown"];
 
 export default function NewBeetlePage() {
   const router = useRouter();
@@ -21,10 +17,9 @@ export default function NewBeetlePage() {
       .then((r) => r.json())
       .then((d) => {
         if (d.success) {
-          const all: string[] = (d.data as { species: string }[])
-            .map((b) => b.species)
-            .filter(Boolean);
-          const unique = all.filter((v, i) => all.indexOf(v) === i);
+          const unique = Array.from(new Set<string>(
+            (d.data as { species: string }[]).map((b) => b.species).filter(Boolean)
+          ));
           setSpeciesList(unique);
         }
       })

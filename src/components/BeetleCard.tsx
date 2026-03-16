@@ -1,32 +1,14 @@
 import Link from "next/link";
-import { BeetleSummary } from "@/types";
+import { BeetleSummary, STAGE_LABEL, STAGE_ICON, STATUS_LABEL, STATUS_STYLE } from "@/types";
 import { ChevronRight, Package, Scale } from "lucide-react";
 
-const STAGE_META: Record<string, { icon: string; bg: string; text: string; border: string }> = {
-  Egg:   { icon: "🥚", bg: "bg-yellow-100",  text: "text-yellow-700",  border: "border-l-yellow-400" },
-  L1:    { icon: "🐛", bg: "bg-lime-100",    text: "text-lime-700",    border: "border-l-lime-400" },
-  L2:    { icon: "🐛", bg: "bg-green-100",   text: "text-green-700",   border: "border-l-green-400" },
-  L3:    { icon: "🐛", bg: "bg-forest-100",  text: "text-forest-700",  border: "border-l-forest-400" },
-  Pupa:  { icon: "🫘", bg: "bg-amber-100",   text: "text-amber-700",   border: "border-l-amber-400" },
-  Adult: { icon: "🪲", bg: "bg-emerald-100", text: "text-emerald-700", border: "border-l-emerald-500" },
-};
-
-const STATUS_STYLE: Record<string, string> = {
-  Healthy: "bg-green-100 text-green-700",
-  Sick:    "bg-red-100 text-red-600",
-  Dead:    "bg-gray-200 text-gray-500",
-  Sold:    "bg-blue-100 text-blue-600",
-};
-
-const STATUS_LABEL: Record<string, string> = {
-  Healthy: "สุขภาพดี",
-  Sick:    "ป่วย",
-  Dead:    "ตาย",
-  Sold:    "ขายแล้ว",
-};
-
-const STAGE_LABEL: Record<string, string> = {
-  Egg: "ไข่", L1: "L1", L2: "L2", L3: "L3", Pupa: "ดักแด้", Adult: "ตัวเต็มวัย",
+const STAGE_META: Record<string, { bg: string; text: string; border: string }> = {
+  Egg:   { bg: "bg-yellow-100",  text: "text-yellow-700",  border: "border-l-yellow-400" },
+  L1:    { bg: "bg-lime-100",    text: "text-lime-700",    border: "border-l-lime-400" },
+  L2:    { bg: "bg-green-100",   text: "text-green-700",   border: "border-l-green-400" },
+  L3:    { bg: "bg-forest-100",  text: "text-forest-700",  border: "border-l-forest-400" },
+  Pupa:  { bg: "bg-amber-100",   text: "text-amber-700",   border: "border-l-amber-400" },
+  Adult: { bg: "bg-emerald-100", text: "text-emerald-700", border: "border-l-emerald-500" },
 };
 
 interface BeetleCardProps {
@@ -34,7 +16,8 @@ interface BeetleCardProps {
 }
 
 export default function BeetleCard({ beetle }: BeetleCardProps) {
-  const meta = STAGE_META[beetle.stage] ?? { icon: "🪲", bg: "bg-gray-100", text: "text-gray-600", border: "border-l-gray-300" };
+  const meta = STAGE_META[beetle.stage] ?? { bg: "bg-gray-100", text: "text-gray-600", border: "border-l-gray-300" };
+  const icon = STAGE_ICON[beetle.stage] ?? "🪲";
 
   return (
     <Link
@@ -43,7 +26,7 @@ export default function BeetleCard({ beetle }: BeetleCardProps) {
     >
       {/* Stage icon */}
       <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 ${meta.bg}`}>
-        {meta.icon}
+        {icon}
       </div>
 
       {/* Main info */}

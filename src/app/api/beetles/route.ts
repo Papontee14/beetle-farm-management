@@ -1,9 +1,3 @@
-/**
- * GET /api/beetles       – ดึงด้วงทั้งหมด (รองรับ ?search=, ?stage=, ?status=)
- * POST /api/beetles      – เพิ่มด้วงใหม่
- * ใช้ in-memory mock store (ไม่ต้องเชื่อมต่อ database)
- */
-
 import { NextRequest, NextResponse } from "next/server";
 import { findAll, createBeetle } from "@/lib/supabaseStore";
 

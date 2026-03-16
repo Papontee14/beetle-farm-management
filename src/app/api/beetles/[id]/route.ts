@@ -1,10 +1,3 @@
-/**
- * GET    /api/beetles/[id]  – ดึงข้อมูลด้วงรายตัว (รวม logs ครบ)
- * PUT    /api/beetles/[id]  – แก้ไขข้อมูลด้วง
- * DELETE /api/beetles/[id]  – ลบด้วง
- * ใช้ in-memory mock store
- */
-
 import { NextRequest, NextResponse } from "next/server";
 import { findById, updateBeetle, deleteBeetle } from "@/lib/supabaseStore";
 

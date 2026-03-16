@@ -4,6 +4,8 @@ import {
   BeetleStatus,
   BeetleSummary,
   DashboardStats,
+  STAGES,
+  STATUSES,
 } from "@/types";
 import { assertSupabaseEnv, supabaseAdmin } from "@/lib/supabaseAdmin";
 
@@ -32,8 +34,7 @@ type DuplicateOptions = {
   splitQty: number;
 };
 
-const STAGES: BeetleStage[] = ["Egg", "L1", "L2", "L3", "Pupa", "Adult"];
-const STATUSES: BeetleStatus[] = ["Healthy", "Sick", "Dead", "Sold"];
+// STAGES and STATUSES are imported from "@/types"
 
 let cachedFarmId: string | null = null;
 
@@ -510,12 +511,7 @@ export async function duplicateBeetle(
 }
 
 export async function getDashboardStats(): Promise<DashboardStats> {
-  // Some Supabase setups may return empty rows when embedding log relations in list queries.
-  // Fall back to lightweight rows so dashboard still reflects actual beetle counts.
-  let all = await findAll(undefined, { includeLogs: true });
-  if (all.length === 0) {
-    all = await findAll(undefined, { includeLogs: false });
-  }
+  const all = await findAll(undefined, { includeLogs: true });
 
   const now = new Date();
   const weekLater = new Date(now);
@@ -544,11 +540,6 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     quantity: b.quantity,
   });
 
-  const stripHeavy = (b: Beetle) => {
-    const { weightLogs: _w, feedingLogs: _f, healthRecords: _h } = b;
-    return toSummary(b);
-  };
-
   const soilChangeDueToday = all
     .filter(
       (b) =>
@@ -557,7 +548,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
         b.stage !== "Egg" &&
         b.stage !== "Adult"
     )
-    .map(stripHeavy);
+    .map(toSummary);
 
   const soilChangeDueThisWeek = all
     .filter(
@@ -568,7 +559,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
         b.stage !== "Egg" &&
         b.stage !== "Adult"
     )
-    .map(stripHeavy);
+    .map(toSummary);
 
   const speciesMap = new Map<string, number>();
   for (const b of all) {
@@ -588,10 +579,10 @@ export async function getDashboardStats(): Promise<DashboardStats> {
           const lastWeighed = Math.max(...b.weightLogs.map((w) => new Date(w.date).getTime()));
           return lastWeighed < fourteenDaysAgo.getTime();
         })
-        .map(stripHeavy)
+        .map(toSummary)
     : [];
 
-  const sickBeetles = all.filter((b) => b.status === "Sick").map(stripHeavy);
+  const sickBeetles = all.filter((b) => b.status === "Sick").map(toSummary);
 
   return {
     totalBeetles: all.length,

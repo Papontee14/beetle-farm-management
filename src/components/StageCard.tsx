@@ -1,5 +1,4 @@
 interface StageCardProps {
-  stage: string;
   label: string;
   count: number;
   color: string;

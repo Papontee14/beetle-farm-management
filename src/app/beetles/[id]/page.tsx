@@ -9,21 +9,10 @@ import toast from "react-hot-toast";
 import {
   Pencil, Trash2, Scale, ChevronLeft, AlertTriangle, Check, X, Copy, Leaf,
 } from "lucide-react";
-import { Beetle, BeetleStage, BeetleStatus, BeetleSex, WeightLog } from "@/types";
+import { Beetle, BeetleStage, BeetleStatus, BeetleSex, WeightLog, STAGES, STATUSES, SEXES, STATUS_STYLE } from "@/types";
 import WeightChart from "@/components/WeightChart";
 import BeetleSearchInput from "@/components/BeetleSearchInput";
 import FarmDatePicker from "@/components/FarmDatePicker";
-
-const STAGES: BeetleStage[]  = ["Egg", "L1", "L2", "L3", "Pupa", "Adult"];
-const STATUSES: BeetleStatus[] = ["Healthy", "Sick", "Dead", "Sold"];
-const SEXES: BeetleSex[]     = ["Male", "Female", "Unknown"];
-
-const STATUS_COLOR: Record<string, string> = {
-  Healthy: "bg-green-100 text-green-700",
-  Sick:    "bg-red-100 text-red-600",
-  Dead:    "bg-gray-200 text-gray-500",
-  Sold:    "bg-blue-100 text-blue-600",
-};
 
 export default function BeetleDetailPage() {
   const { id }   = useParams<{ id: string }>();
@@ -208,7 +197,7 @@ export default function BeetleDetailPage() {
         <h1 className="flex-1 text-xl font-bold text-forest-800 truncate">
           {beetle.beetleId}
         </h1>
-        <span className={`text-xs font-bold px-2 py-1 rounded-full ${STATUS_COLOR[beetle.status] ?? "bg-gray-100"}`}>
+        <span className={`text-xs font-bold px-2 py-1 rounded-full ${STATUS_STYLE[beetle.status] ?? "bg-gray-100"}`}>
           {beetle.status}
         </span>
       </div>

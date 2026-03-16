@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    font-family: "Noto Sans Thai", "Sarabun", system-ui, sans-serif;
+    font-family: var(--font-noto-sans-thai), "Sarabun", system-ui, sans-serif;
     -webkit-tap-highlight-color: transparent;
   }
   body {

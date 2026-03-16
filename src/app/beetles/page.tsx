@@ -4,12 +4,9 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Bug, Plus, Search, SlidersHorizontal, X } from "lucide-react";
-import { BeetleSummary, BeetleStage, BeetleStatus, BeetleSex } from "@/types";
+import { BeetleSummary, BeetleStage, BeetleStatus, BeetleSex, STATUSES, SEXES } from "@/types";
 import BeetleCard from "@/components/BeetleCard";
 import FarmSelect from "@/components/FarmSelect";
-
-const STATUSES: BeetleStatus[] = ["Healthy", "Sick", "Dead", "Sold"];
-const SEXES: BeetleSex[] = ["Male", "Female", "Unknown"];
 
 const STAGE_QUICK: { value: BeetleStage | ""; label: string; icon: string }[] = [
   { value: "",      label: "ทั้งหมด",     icon: "🪲" },
@@ -28,8 +25,15 @@ function BeetlesContent() {
   const [beetles, setBeetles]     = useState<BeetleSummary[]>([]);
   const [loading, setLoading]     = useState(true);
   const [speciesList, setSpeciesList] = useState<string[]>([]);
-  const [showFilter, setShowFilter]   = useState(false);
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showFilter, setShowFilter]   = useState(() =>
+    !!(searchParams.get("sex") || searchParams.get("fatherId") || searchParams.get("motherId") ||
+       searchParams.get("containerCode") || searchParams.get("weightMin") || searchParams.get("weightMax") ||
+       searchParams.get("status") || searchParams.get("species"))
+  );
+  const [showAdvanced, setShowAdvanced] = useState(() =>
+    !!(searchParams.get("sex") || searchParams.get("fatherId") || searchParams.get("motherId") ||
+       searchParams.get("containerCode") || searchParams.get("weightMin") || searchParams.get("weightMax"))
+  );
 
   // Filters — init from URL
   const [search,        setSearch]        = useState(searchParams.get("search")        ?? "");
@@ -42,17 +46,6 @@ function BeetlesContent() {
   const [weightMax,     setWeightMax]     = useState(searchParams.get("weightMax")     ?? "");
   const [fatherId,      setFatherId]      = useState(searchParams.get("fatherId")      ?? "");
   const [motherId,      setMotherId]      = useState(searchParams.get("motherId")      ?? "");
-
-  // Initialize panel state from URL
-  useState(() => {
-    const p = searchParams;
-    if (p.get("sex") || p.get("fatherId") || p.get("motherId") ||
-        p.get("containerCode") || p.get("weightMin") || p.get("weightMax")) {
-      setShowFilter(true); setShowAdvanced(true);
-    } else if (p.get("status") || p.get("species")) {
-      setShowFilter(true);
-    }
-  });
 
   const activeFilterCount = [status, species, sex, containerCode, weightMin, weightMax, fatherId, motherId].filter(Boolean).length;
   const hasFilters = !!(search || stage || activeFilterCount);

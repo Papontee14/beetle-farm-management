@@ -41,7 +41,7 @@ export default function DashboardPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/dashboard")
+    fetch("/api/dashboard", { cache: "no-store" })
       .then((r) => r.json())
       .then((res) => {
         if (res.success) setStats(res.data);
@@ -179,7 +179,6 @@ export default function DashboardPage() {
               {STAGE_META.map((m) => (
                 <StageCard
                   key={m.stage}
-                  stage={m.stage}
                   label={m.label}
                   count={s.byStage[m.stage] ?? 0}
                   color={m.color}

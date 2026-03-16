@@ -113,3 +113,43 @@ export interface ApiError {
 }
 
 export type ApiResponse<T> = ApiSuccess<T> | ApiError;
+
+// ======================================================
+// Shared UI constants — single source of truth
+// ======================================================
+
+export const STAGES: BeetleStage[] = ["Egg", "L1", "L2", "L3", "Pupa", "Adult"];
+export const STATUSES: BeetleStatus[] = ["Healthy", "Sick", "Dead", "Sold"];
+export const SEXES: BeetleSex[] = ["Male", "Female", "Unknown"];
+
+export const STAGE_LABEL: Record<BeetleStage, string> = {
+  Egg: "ไข่",
+  L1: "L1",
+  L2: "L2",
+  L3: "L3",
+  Pupa: "ดักแด้",
+  Adult: "ตัวเต็มวัย",
+};
+
+export const STAGE_ICON: Record<BeetleStage, string> = {
+  Egg: "🥚",
+  L1: "🐛",
+  L2: "🐛",
+  L3: "🐛",
+  Pupa: "🫘",
+  Adult: "🪲",
+};
+
+export const STATUS_LABEL: Record<BeetleStatus, string> = {
+  Healthy: "สุขภาพดี",
+  Sick: "ป่วย",
+  Dead: "ตาย",
+  Sold: "ขายแล้ว",
+};
+
+export const STATUS_STYLE: Record<BeetleStatus, string> = {
+  Healthy: "bg-green-100 text-green-700",
+  Sick: "bg-red-100 text-red-600",
+  Dead: "bg-gray-200 text-gray-500",
+  Sold: "bg-blue-100 text-blue-600",
+};

@@ -1,9 +1,3 @@
-/**
- * POST /api/feeding  – บันทึกการให้อาหารและน้ำหนัก
- * Body: { beetleId: string, feedingLog?: FeedingLog, weightLog?: WeightLog }
- * ใช้ in-memory mock store
- */
-
 import { NextRequest, NextResponse } from "next/server";
 import { addWeightLog, addFeedingLog, findById, recordSoilChange } from "@/lib/supabaseStore";
 

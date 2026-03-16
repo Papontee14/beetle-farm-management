@@ -6,7 +6,7 @@ import { format, differenceInCalendarDays } from "date-fns";
 import { th } from "date-fns/locale";
 import toast from "react-hot-toast";
 import { CheckCircle2, Leaf, Loader2, Plus } from "lucide-react";
-import { BeetleSummary } from "@/types";
+import { BeetleSummary, STAGE_ICON } from "@/types";
 import FarmSelect from "@/components/FarmSelect";
 
 const DAYS_OPTIONS = [
@@ -18,10 +18,6 @@ const DAYS_OPTIONS = [
   { value: "60", label: "60 วัน" },
   { value: "90", label: "90 วัน" },
 ];
-
-const STAGE_ICON: Record<string, string> = {
-  Egg: "🥚", L1: "🐛", L2: "🐛", L3: "🐛", Pupa: "🫘", Adult: "🪲",
-};
 
 type SoilGroup = "overdue" | "urgent" | "upcoming" | "ok" | "none";
 
