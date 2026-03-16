@@ -12,6 +12,7 @@ import {
 import { Beetle, BeetleStage, BeetleStatus, BeetleSex, WeightLog } from "@/types";
 import WeightChart from "@/components/WeightChart";
 import BeetleSearchInput from "@/components/BeetleSearchInput";
+import FarmDatePicker from "@/components/FarmDatePicker";
 
 const STAGES: BeetleStage[]  = ["Egg", "L1", "L2", "L3", "Pupa", "Adult"];
 const STATUSES: BeetleStatus[] = ["Healthy", "Sick", "Dead", "Sold"];
@@ -337,9 +338,15 @@ export default function BeetleDetailPage() {
               {(editForm.stage ?? beetle.stage) !== "Egg" && (editForm.stage ?? beetle.stage) !== "Adult" && (
                 <div>
                   <label className="label">นัดเปลี่ยนแมท</label>
-                  <input className="input-field" type="date"
-                    defaultValue={beetle.nextSoilChange ? beetle.nextSoilChange.slice(0, 10) : ""}
-                    onChange={(e) => setEF("nextSoilChange", e.target.value)} />
+                  <FarmDatePicker
+                    value={
+                      typeof editForm.nextSoilChange === "string"
+                        ? editForm.nextSoilChange
+                        : (beetle.nextSoilChange ? beetle.nextSoilChange.slice(0, 10) : "")
+                    }
+                    onChange={(value) => setEF("nextSoilChange", value)}
+                    placeholder="เลือกวันที่นัดเปลี่ยนแมท"
+                  />
                 </div>
               )}
             </div>
@@ -531,7 +538,7 @@ export default function BeetleDetailPage() {
         {beetle.weightLogs && beetle.weightLogs.length > 0 ? (
           <>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">ประวัติการชั่ง</p>
-            <ul className="divide-y divide-gray-100 text-sm max-h-52 overflow-y-auto">
+            <ul className="divide-y divide-gray-100 text-sm">
               {[...beetle.weightLogs]
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map((w) =>
@@ -544,11 +551,11 @@ export default function BeetleDetailPage() {
                           value={editLogWeight}
                           onChange={(e) => setEditLogWeight(e.target.value)}
                         />
-                        <input
-                          className="input-field !py-1.5 !text-sm w-28 shrink-0"
-                          type="date"
+                        <FarmDatePicker
                           value={editLogDate}
-                          onChange={(e) => setEditLogDate(e.target.value)}
+                          onChange={setEditLogDate}
+                          className="w-36 shrink-0"
+                          placeholder="เลือกวันที่"
                         />
                       </div>
                       <input

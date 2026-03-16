@@ -198,7 +198,7 @@ export default function DashboardPage() {
                       style={{ width: `${Math.max(4, row.ratio)}%` }}
                     />
                   </div>
-                  <p className="w-12 text-right font-bold text-gray-700">
+                  <p className="w-[68px] whitespace-nowrap text-right font-bold text-gray-700">
                     {row.count} ({row.ratio}%)
                   </p>
                 </div>

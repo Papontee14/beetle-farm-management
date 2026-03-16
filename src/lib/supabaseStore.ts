@@ -210,18 +210,18 @@ function toDbPatch(patch: Partial<Beetle>) {
     sex: patch.sex,
     stage: patch.stage,
     status: patch.status,
-    birth_date: toDateOnly(patch.birthDate),
-    entry_date: toDateOnly(patch.entryDate),
+    birth_date: patch.birthDate === undefined ? undefined : toDateOnly(patch.birthDate),
+    entry_date: patch.entryDate === undefined ? undefined : toDateOnly(patch.entryDate),
     container_code: patch.containerCode,
     current_weight_grams:
       patch.currentWeightGrams === undefined ? undefined : Number(patch.currentWeightGrams),
     quantity: patch.quantity,
     length_mm: patch.lengthMm === undefined ? undefined : Number(patch.lengthMm),
-    emergence_date: toDateOnly(patch.emergenceDate),
-    first_feeding_date: toDateOnly(patch.firstFeedingDate),
+    emergence_date: patch.emergenceDate === undefined ? undefined : toDateOnly(patch.emergenceDate),
+    first_feeding_date: patch.firstFeedingDate === undefined ? undefined : toDateOnly(patch.firstFeedingDate),
     parent_info: patch.parentInfo,
-    last_soil_change: toDateOnly(patch.lastSoilChange),
-    next_soil_change: toDateOnly(patch.nextSoilChange),
+    last_soil_change: patch.lastSoilChange === undefined ? undefined : toDateOnly(patch.lastSoilChange),
+    next_soil_change: patch.nextSoilChange === undefined ? undefined : toDateOnly(patch.nextSoilChange),
     notes: patch.notes,
   };
 }
@@ -510,7 +510,12 @@ export async function duplicateBeetle(
 }
 
 export async function getDashboardStats(): Promise<DashboardStats> {
-  const all = await findAll(undefined, { includeLogs: true });
+  // Some Supabase setups may return empty rows when embedding log relations in list queries.
+  // Fall back to lightweight rows so dashboard still reflects actual beetle counts.
+  let all = await findAll(undefined, { includeLogs: true });
+  if (all.length === 0) {
+    all = await findAll(undefined, { includeLogs: false });
+  }
 
   const now = new Date();
   const weekLater = new Date(now);
@@ -573,15 +578,18 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     .map(([species, count]) => ({ species, count }))
     .sort((a, b) => b.count - a.count);
 
-  const notWeighedRecently = all
-    .filter((b) => {
-      if (!["L1", "L2", "L3", "Pupa"].includes(b.stage)) return false;
-      if (b.status === "Dead" || b.status === "Sold") return false;
-      if (!b.weightLogs || b.weightLogs.length === 0) return true;
-      const lastWeighed = Math.max(...b.weightLogs.map((w) => new Date(w.date).getTime()));
-      return lastWeighed < fourteenDaysAgo.getTime();
-    })
-    .map(stripHeavy);
+  const hasAnyWeightLogs = all.some((b) => (b.weightLogs?.length ?? 0) > 0);
+  const notWeighedRecently = hasAnyWeightLogs
+    ? all
+        .filter((b) => {
+          if (!["L1", "L2", "L3", "Pupa"].includes(b.stage)) return false;
+          if (b.status === "Dead" || b.status === "Sold") return false;
+          if (!b.weightLogs || b.weightLogs.length === 0) return true;
+          const lastWeighed = Math.max(...b.weightLogs.map((w) => new Date(w.date).getTime()));
+          return lastWeighed < fourteenDaysAgo.getTime();
+        })
+        .map(stripHeavy)
+    : [];
 
   const sickBeetles = all.filter((b) => b.status === "Sick").map(stripHeavy);
 
