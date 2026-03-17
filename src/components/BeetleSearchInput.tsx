@@ -79,7 +79,7 @@ export default function BeetleSearchInput({
         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
         <input
           className="input-field pl-8 pr-8"
-          placeholder="ค้นหา ID, ชื่อ…"
+          placeholder="ค้นหา ID, สายพันธุ์…"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -109,7 +109,6 @@ export default function BeetleSearchInput({
                 className="w-full text-left px-3 py-2 hover:bg-forest-50 flex items-center gap-2"
               >
                 <span className="font-bold text-forest-700">{b.beetleId}</span>
-                {b.name && <span className="text-gray-500 text-xs">({b.name})</span>}
                 <span className="ml-auto text-xs text-gray-400 shrink-0">{b.stage} · {b.species}</span>
               </button>
             </li>

@@ -130,7 +130,7 @@ function BeetlesContent() {
         <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
         <input
           className="input-field pl-10 pr-10"
-          placeholder="ค้นหา ID, ชื่อ, สายพันธุ์, กล่อง…"
+          placeholder="ค้นหา ID, สายพันธุ์, กล่อง…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />

@@ -273,7 +273,7 @@ export default function DashboardPage() {
                     className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors hover:bg-amber-50"
                   >
                     <span className="font-bold text-forest-700 shrink-0">{b.beetleId}</span>
-                    <span className="truncate text-gray-500">{b.name || b.species}</span>
+                    <span className="truncate text-gray-500">{b.species}</span>
                     <span className="ml-auto rounded-md bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500">{b.stage}</span>
                   </Link>
                 ))}
@@ -330,7 +330,7 @@ export default function DashboardPage() {
                     className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors hover:bg-red-50"
                   >
                     <span className="font-bold text-red-600 shrink-0">{b.beetleId}</span>
-                    <span className="truncate text-gray-500">{b.name || b.species}</span>
+                    <span className="truncate text-gray-500">{b.species}</span>
                     <span className="ml-auto rounded-md bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500">{b.stage}</span>
                   </Link>
                 ))}

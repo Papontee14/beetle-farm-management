@@ -33,9 +33,6 @@ export default function BeetleCard({ beetle }: BeetleCardProps) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className="font-bold text-sm text-gray-900">{beetle.beetleId}</span>
-          {beetle.name && (
-            <span className="text-gray-400 text-xs">({beetle.name})</span>
-          )}
           {(beetle.quantity ?? 1) > 1 && (
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-violet-100 text-violet-700">
               ×{beetle.quantity}

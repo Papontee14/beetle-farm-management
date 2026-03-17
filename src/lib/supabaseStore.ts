@@ -92,7 +92,6 @@ function mapBeetle(row: any, includeLogs = false): Beetle {
   const mapped: Beetle = {
     _id: row.id,
     beetleId: row.beetle_code,
-    name: row.name ?? undefined,
     species: row.species,
     lineage: row.lineage ?? undefined,
     sex: row.sex,
@@ -169,7 +168,6 @@ function beetleBaseSelect(includeLogs: boolean): string {
     "id",
     "farm_id",
     "beetle_code",
-    "name",
     "species",
     "lineage",
     "sex",
@@ -205,7 +203,6 @@ function beetleBaseSelect(includeLogs: boolean): string {
 function toDbPatch(patch: Partial<Beetle>) {
   return {
     beetle_code: patch.beetleId,
-    name: patch.name,
     species: patch.species,
     lineage: patch.lineage,
     sex: patch.sex,
@@ -302,7 +299,7 @@ export async function findAll(filter?: FindFilter, options?: FindOptions): Promi
     const q = filter.search.trim();
     if (q) {
       query = query.or(
-        `beetle_code.ilike.%${q}%,name.ilike.%${q}%,species.ilike.%${q}%,container_code.ilike.%${q}%,lineage.ilike.%${q}%`
+        `beetle_code.ilike.%${q}%,species.ilike.%${q}%,container_code.ilike.%${q}%,lineage.ilike.%${q}%`
       );
     }
   }
@@ -530,7 +527,6 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   const toSummary = (b: Beetle): BeetleSummary => ({
     _id: b._id ?? "",
     beetleId: b.beetleId,
-    name: b.name,
     species: b.species,
     stage: b.stage,
     status: b.status,

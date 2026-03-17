@@ -28,7 +28,6 @@ export default function NewBeetlePage() {
 
   const [form, setForm] = useState({
     beetleId:      "",
-    name:          "",
     species:       "",
     lineage:       "",
     sex:           "Unknown" as BeetleSex,
@@ -103,16 +102,11 @@ export default function NewBeetlePage() {
         {/* Identity */}
         <div className="card space-y-3">
           <h2 className="font-bold text-gray-700 text-sm uppercase tracking-wide">ข้อมูลประจำตัว</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             <div>
               <label className="label">รหัสด้วง *</label>
               <input className="input-field" placeholder="BTL-001" required
                 value={form.beetleId} onChange={(e) => set("beetleId", e.target.value)} />
-            </div>
-            <div>
-              <label className="label">ชื่อเล่น</label>
-              <input className="input-field" placeholder="(ไม่บังคับ)"
-                value={form.name} onChange={(e) => set("name", e.target.value)} />
             </div>
           </div>
           <div>

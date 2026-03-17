@@ -50,7 +50,6 @@ export interface ParentInfo {
 export interface Beetle {
   _id?: string;
   beetleId: string;           // unique farm ID e.g. "BTL-001"
-  name?: string;
   species: string;            // e.g. "Dynastes hercules"
   lineage?: string;           // parent IDs or bloodline label
   sex: BeetleSex;
@@ -91,7 +90,6 @@ export interface DashboardStats {
 export interface BeetleSummary {
   _id: string;
   beetleId: string;
-  name?: string;
   species: string;
   stage: BeetleStage;
   status: BeetleStatus;
